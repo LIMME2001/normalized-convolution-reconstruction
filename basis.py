@@ -21,7 +21,3 @@ class PolynomialBasis:
     
     def __call__(self):
         return self.basis
-    
-    @property
-    def size(self):
-        return self.B.shape[1]
