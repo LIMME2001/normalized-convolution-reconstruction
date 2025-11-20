@@ -22,6 +22,18 @@ This project implements the theory from **Knutsson et al.** on **Normalized Conv
 ```bash
 git clone https://github.com/LIMME2001/normalized-convolution-reconstruction.git
 cd normalized-convolution-reconstruction
+
+# Create a virtual environment
+python -m venv venv
+
+# Activate the virtual environment
+# Linux/macOS:
+source venv/bin/activate
+# Windows:
+venv\Scripts\activate
+
+# Install dependencies
+pip install -r requirements.txt
 ```
 <!-- # TODO: create a requirements.txt file
 # pip install -r requirements.txt -->
