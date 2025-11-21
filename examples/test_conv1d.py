@@ -5,8 +5,8 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 import numpy as np
 import matplotlib.pyplot as plt
 
-from basis import PolynomialBasis
-from applicability import GaussianApplicability
+from basis import PolynomialBasis1D
+from applicability import GaussianApplicability1D
 from conv1d import NormalizedConvolution1D
 
 # 1D test signal
@@ -14,8 +14,8 @@ k = np.arange(0, 101)
 signal = np.sin(k/10)
 
 # Basis and applicability
-basis = PolynomialBasis(order=2, window_size=7)
-applicability = GaussianApplicability(window_size=7, sigma=2.0)
+basis = PolynomialBasis1D(order=2, window_size=7)
+applicability = GaussianApplicability1D(window_size=7, sigma=2.0)
 
 # Uncertain signal (change uncertainty if needed)
 certainty = (np.random.rand(len(signal)) > 0.3)

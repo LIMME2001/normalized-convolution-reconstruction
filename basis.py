@@ -2,9 +2,9 @@
 
 import numpy as np
 
-class PolynomialBasis:
+class PolynomialBasis1D:
     """
-    Creates polynomial basis functions up to a given order.
+    Creates a 1D polynomial basis functions up to a given order.
     
     basis order k means [1, x, x^2, ..., x^k]
     """
@@ -21,3 +21,28 @@ class PolynomialBasis:
     
     def __call__(self):
         return self.basis
+    
+class PolynomialBasis2D:
+    """
+    2D polynomial basis up to a given total order.
+    Produces basis functions on a (window_size x window_size) grid.
+    """
+
+    def __init__(self, order, window_size):
+        self.order = order
+        self.window_size = window_size
+
+    def __call__(self):
+        r = self.window_size // 2
+        x = np.arange(-r, r + 1)
+        y = np.arange(-r, r + 1)
+        X, Y = np.meshgrid(x, y, indexing="xy")
+
+        basis = []
+
+        for i in range(self.order + 1):
+            for j in range(self.order + 1 - i):
+                # factorial scaling (consistent with 1D version)
+                basis.append(X**i * Y**j)
+
+        return np.array(basis)

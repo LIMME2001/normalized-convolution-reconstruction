@@ -1,6 +1,5 @@
 import numpy as np
-from scipy.signal import convolve
-from basis import PolynomialBasis
+from scipy.signal import convolve, convolve2d
 
 class NormalizedConvolution1D:
     """
@@ -67,3 +66,67 @@ class NormalizedConvolution1D:
                 c[:, k] = np.zeros(num_basis)
 
         return c
+    
+
+class NormalizedConvolution2D:
+    """
+    2D Normalized Convolution using polynomial basis B(x,y) and applicability a(x,y).
+    Certainty is optional. If omitted, all samples are treated as fully certain.
+    """
+
+    def __init__(self, basis, applicability):
+        self.B = basis() # shape: (num_basis, w, w)
+        self.a = applicability() # shape: (w, w)
+        self.num_basis = self.B.shape[0]
+
+    def filter_signal(self, image, certainty):
+        """
+        Compute H_i = conv2((image * certainty), (b_i * a))
+        """
+        imc = image * certainty
+        return np.array([
+            convolve2d(imc, (b * self.a)[::-1, ::-1], mode='same')
+            for b in self.B
+        ])
+
+    def compute_metric(self, certainty):
+        """
+        Compute metric tensor:
+        G_ij = conv2(certainty, B_i * a * B_j)
+        """
+        h, w = certainty.shape
+        G = np.zeros((self.num_basis, self.num_basis, h, w))
+
+        for i in range(self.num_basis):
+            for j in range(self.num_basis):
+                kernel = (self.B[i] * self.a * self.B[j])[::-1, ::-1]
+                G[i, j] = convolve2d(certainty, kernel, mode='same')
+
+        return G
+
+    def compute_coordinates(self, image, certainty=None):
+        """
+        Compute normalized convolution coordinates per pixel.
+        """
+        if certainty is None:
+            certainty = np.ones_like(image)
+
+        H = self.filter_signal(image, certainty)
+        G = self.compute_metric(certainty)
+
+        h, w = image.shape
+        c = np.zeros((self.num_basis, h, w))
+
+        for y in range(h):
+            for x in range(w):
+                try:
+                    c[:, y, x] = np.linalg.solve(G[:, :, y, x], H[:, y, x])
+                except np.linalg.LinAlgError:
+                    c[:, y, x] = 0
+
+        return c
+    
+    def low_pass_filtered(self, image, certainty=None):
+        if certainty is None:
+            certainty = np.ones_like(image)
+        return convolve2d(image * certainty, self.a, mode='same')

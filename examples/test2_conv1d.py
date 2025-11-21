@@ -4,8 +4,9 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 import numpy as np
 import matplotlib.pyplot as plt
-from basis import PolynomialBasis
-from applicability import GaussianApplicability
+
+from basis import PolynomialBasis1D
+from applicability import GaussianApplicability1D
 from conv1d import NormalizedConvolution1D
 
 # 1D test signal
@@ -23,8 +24,8 @@ for order in orders_to_test:
     print(f"\n=== Testing basis order {order} ===")
 
     # Basis and applicability
-    basis = PolynomialBasis(order=order, window_size=7)
-    applicability = GaussianApplicability(window_size=7, sigma=2.0)
+    basis = PolynomialBasis1D(order=order, window_size=7)
+    applicability = GaussianApplicability1D(window_size=7, sigma=2.0)
 
     # Normalized convolution
     nc = NormalizedConvolution1D(basis, applicability)
