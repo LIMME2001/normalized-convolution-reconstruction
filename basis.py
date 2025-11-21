@@ -31,8 +31,9 @@ class PolynomialBasis2D:
     def __init__(self, order, window_size):
         self.order = order
         self.window_size = window_size
+        self.basis = self._build()
 
-    def __call__(self):
+    def _build(self):
         r = self.window_size // 2
         x = np.arange(-r, r + 1)
         y = np.arange(-r, r + 1)
@@ -46,3 +47,6 @@ class PolynomialBasis2D:
                 basis.append(X**i * Y**j)
 
         return np.array(basis)
+
+    def __call__(self):
+        return self.basis

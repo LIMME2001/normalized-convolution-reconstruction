@@ -24,11 +24,15 @@ class GaussianApplicability2D:
     def __init__(self, window_size=7, sigma=2.0):
         self.window_size = window_size
         self.sigma = sigma
+        self.kernel = self._build()
 
-    def __call__(self):
+    def _build(self):
         r = self.window_size // 2
         x = np.arange(-r, r + 1)
         y = np.arange(-r, r + 1)
         X, Y = np.meshgrid(x, y, indexing="xy")
+        a = np.exp(-(X**2 + Y**2) / (2 * self.sigma**2))
+        return a/a.sum()
 
-        return np.exp(-(X**2 + Y**2) / (2 * self.sigma**2))
+    def __call__(self):
+        return self.kernel
