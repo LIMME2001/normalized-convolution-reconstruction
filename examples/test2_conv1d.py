@@ -6,7 +6,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from basis import PolynomialBasis
 from applicability import GaussianApplicability
-from conv1d import NormalizedConvolution1DUncertain
+from conv1d import NormalizedConvolution1D
 
 # 1D test signal
 k = np.arange(0, 101)
@@ -27,7 +27,7 @@ for order in orders_to_test:
     applicability = GaussianApplicability(window_size=7, sigma=2.0)
 
     # Normalized convolution
-    nc = NormalizedConvolution1DUncertain(basis, applicability)
+    nc = NormalizedConvolution1D(basis, applicability)
     c = nc.compute_coordinates(signal_uncertain, certainty) # Shape: (order+1, len(signal))
 
     # Create figure

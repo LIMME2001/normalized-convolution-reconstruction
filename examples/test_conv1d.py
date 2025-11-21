@@ -4,9 +4,10 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 import numpy as np
 import matplotlib.pyplot as plt
+
 from basis import PolynomialBasis
 from applicability import GaussianApplicability
-from conv1d import NormalizedConvolution1DUncertain
+from conv1d import NormalizedConvolution1D
 
 # 1D test signal
 k = np.arange(0, 101)
@@ -21,7 +22,7 @@ certainty = (np.random.rand(len(signal)) > 0.3)
 signal_uncertain = signal * certainty
 
 # Normalized convolution
-nc = NormalizedConvolution1DUncertain(basis, applicability)
+nc = NormalizedConvolution1D(basis, applicability)
 c = nc.compute_coordinates(signal_uncertain, certainty)
 
 # Plot

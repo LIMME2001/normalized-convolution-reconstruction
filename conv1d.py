@@ -2,8 +2,11 @@ import numpy as np
 from scipy.signal import convolve
 from basis import PolynomialBasis
 
-class NormalizedConvolution1DUncertain:
-    """Handles signals with missing data using a certainty vector."""
+class NormalizedConvolution1D:
+    """
+    Normalized convolution for 1D signals.
+    Certainty is optional. If omitted, all samples are treated as fully certain.
+    """
 
     def __init__(self, basis, applicability):
         self.B = basis()
@@ -33,7 +36,7 @@ class NormalizedConvolution1DUncertain:
 
         return G
 
-    def compute_coordinates(self, signal, certainty):
+    def compute_coordinates(self, signal, certainty=None):
         """
         Compute proper coordinates c taking uncertain data into account.
 
@@ -41,6 +44,15 @@ class NormalizedConvolution1DUncertain:
             Coordinates for each basis function at each position,
             Shape: (num_basis, len(signal))
         """
+        # Certainty optional
+        if certainty is None:
+            certainty = np.ones_like(signal, dtype=float)
+        
+        # Ensure correct shape
+        certainty = np.asarray(certainty)
+        if certainty.shape != signal.shape:
+            raise ValueError("certainty must have same shape as signal")
+
         H = self.filter_signal(signal) # shape: (num_basis, N)
         G = self.compute_metric(certainty) # shape: (num_basis, num_basis, N)
         num_basis, N = H.shape
