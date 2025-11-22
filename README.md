@@ -35,8 +35,8 @@ venv\Scripts\activate
 # Install dependencies
 pip install -r requirements.txt
 ```
-<!-- # TODO: create a requirements.txt file
-# pip install -r requirements.txt -->
+<!-- 
+#TODO: Implement certainty from edge detectors, noise estimators, segmentation-->
 
 ## Current Progress
 
@@ -54,3 +54,4 @@ pip install -r requirements.txt
 ## References
 
 - Knutsson, H., Westin, C.-F., & others. *Normalized Convolution: A Framework for Handling Uncertain Data in Signal Processing*.
+
